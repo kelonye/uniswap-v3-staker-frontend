@@ -1,0 +1,16 @@
+{
+	"extends": ["react-app"],
+	"plugins": ["prettier"],
+	"rules": {
+		"react/react-in-jsx-scope": "off",
+		"prettier/prettier": [
+			"error",
+			{
+				"semi": true,
+				"singleQuote": true,
+				"trailingComma": "es5",
+				"jsxSingleQuote": true
+			}
+		]
+	}
+}

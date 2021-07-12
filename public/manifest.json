@@ -1,0 +1,10 @@
+{
+  "short_name": "Witswap | Stake",
+  "name": "Witswap | Stake",
+  "icons": [
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "rgba(232, 91, 112)",
+  "background_color": "#ffffff"
+}

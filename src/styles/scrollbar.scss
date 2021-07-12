@@ -1,0 +1,69 @@
+::-webkit-scrollbar {
+  width: 10px;
+  height: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  height: 50px;
+  border-radius: 3px;
+}
+
+.dark {
+  scrollbar-face-color: $dark-border-color;
+  scrollbar-base-color: $dark-border-color;
+  scrollbar-3dlight-color: $dark-border-color;
+  scrollbar-highlight-color: $dark-border-color;
+  scrollbar-track-color: $dark-color;
+  scrollbar-arrow-color: $dark-color;
+  scrollbar-shadow-color: $dark-border-color;
+  scrollbar-dark-shadow-color: $dark-border-color;
+
+  ::-webkit-scrollbar-button {
+    background-color: $dark-color;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: $dark-border-color;
+  }
+  ::-webkit-scrollbar-track-piece {
+    background-color: $dark-color;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: $dark-thumb-color;
+  }
+  ::-webkit-scrollbar-corner {
+    background-color: $dark-border-color;
+  }
+  ::-webkit-resizer {
+    background-color: $dark-thumb-color;
+  }
+}
+
+.light {
+  scrollbar-face-color: $light-border-color;
+  scrollbar-base-color: $light-border-color;
+  scrollbar-3dlight-color: $light-border-color;
+  scrollbar-highlight-color: $light-border-color;
+  scrollbar-track-color: $light-color;
+  scrollbar-arrow-color: $light-color;
+  scrollbar-shadow-color: $light-border-color;
+  scrollbar-light-shadow-color: $light-border-color;
+
+  ::-webkit-scrollbar-button {
+    background-color: $light-color;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: $light-border-color;
+  }
+  ::-webkit-scrollbar-track-piece {
+    background-color: $light-color;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: $light-thumb-color;
+  }
+  ::-webkit-scrollbar-corner {
+    background-color: $light-border-color;
+  }
+  ::-webkit-resizer {
+    background-color: $light-thumb-color;
+  }
+}
