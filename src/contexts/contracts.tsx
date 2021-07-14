@@ -36,6 +36,7 @@ const ContractsContext = createContext<{
   incentives: Incentive[];
   currentIncentiveId: string | null;
   currentIncentive: Incentive | null;
+  setCurrentIncentiveId: (id: string) => void;
   stakingRewardsContract: ethers.Contract | null;
   nftManagerPositionsContract: ethers.Contract | null;
 } | null>(null);
@@ -206,6 +207,7 @@ export const ContractsProvider: FC<{ children: ReactNode }> = ({
         incentives,
         currentIncentiveId,
         currentIncentive,
+        setCurrentIncentiveId,
         stakingRewardsContract,
         nftManagerPositionsContract,
       }}
@@ -231,6 +233,7 @@ export function useContracts() {
     incentives,
     currentIncentiveId,
     currentIncentive,
+    setCurrentIncentiveId,
     stakingRewardsContract,
     nftManagerPositionsContract,
   } = context;
@@ -246,6 +249,7 @@ export function useContracts() {
     incentives,
     currentIncentiveId,
     currentIncentive,
+    setCurrentIncentiveId,
     stakingRewardsContract,
     nftManagerPositionsContract,
   };

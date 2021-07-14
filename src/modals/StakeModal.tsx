@@ -7,6 +7,10 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 import capitalize from 'lodash/capitalize';
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -38,6 +42,9 @@ const StakeStepper: FC<{
     nftManagerPositionsContract,
     stakingRewardsContract,
     currentIncentive,
+    currentIncentiveId,
+    incentives,
+    setCurrentIncentiveId,
   } = useContracts();
 
   const [isWorking, setIsWorking] = useState<string | null>(null);
@@ -181,6 +188,28 @@ const StakeStepper: FC<{
         </Stepper>
 
         <Box px={4} mb={2}>
+          {activeStep !== 2 ? null : (
+            <Box mb={2}>
+              <FormControl>
+                <InputLabel id='incentive-label'>Incentive</InputLabel>
+                <Select
+                  labelId='incentive-label'
+                  id='incentive'
+                  value={currentIncentiveId}
+                  onChange={(e) => {
+                    setCurrentIncentiveId(e.target.value as string);
+                  }}
+                >
+                  {incentives.map((incentive) => (
+                    <MenuItem value={incentive.id} key={incentive.id}>
+                      {incentive.key.startTime} - {incentive.key.endTime}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+          )}
+
           <Button
             color='secondary'
             variant='contained'

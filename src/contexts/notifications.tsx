@@ -60,7 +60,7 @@ export const NotificationsProvider: FC<{ children: ReactNode }> = ({
       const { hash, wait } = await makeTx();
       showTxNotification(startNotification, hash);
       await wait();
-      showSuccessNotification(endNotification, hash);
+      showTxNotification(endNotification, hash);
     } catch (e) {
       showErrorNotification(e);
       throw e;
