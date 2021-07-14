@@ -105,7 +105,7 @@ const TxContent: FC<{ notification: any }> = ({ notification }) => {
       <strong className={classes.small}>{notification.description}</strong>
 
       <a
-        href={`https://${isMainnet ? '' : `${network}.`}etherscan.com/tx/${
+        href={`https://${isMainnet ? '' : `${network}.`}etherscan.io/tx/${
           notification.hash
         }`}
         target='_blank'
