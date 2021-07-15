@@ -13,7 +13,9 @@ import {
 
 import { useWallet } from 'contexts/wallet';
 import { useContracts } from 'contexts/contracts';
+import usePositionReward from 'hooks/usePositionReward';
 import { LiquidityPosition } from 'utils/types';
+import { formatUnits } from 'utils/big-number';
 
 export const useStyles = makeStyles((theme) => ({
   maxButton: {
@@ -83,6 +85,8 @@ const PositionTableRow: FC<{
 }> = ({ position, history }) => {
   const classes = useStyles();
 
+  const reward = usePositionReward(position.tokenId);
+
   const stakeOrUnstake = useCallback(async () => {
     history.push(`/unstake/${position.tokenId}`);
   }, [position.tokenId, history]);
@@ -94,7 +98,7 @@ const PositionTableRow: FC<{
       </TableCell>
       <TableCell></TableCell>
       <TableCell></TableCell>
-      <TableCell></TableCell>
+      <TableCell>{formatUnits(reward, 9)}</TableCell>
       <TableCell align='right'>
         <Button
           color='secondary'
