@@ -11,4 +11,5 @@ export type Incentive = {
 
 export type LiquidityPosition = {
   tokenId: number;
+  owner: string;
 };

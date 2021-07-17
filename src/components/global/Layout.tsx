@@ -1,22 +1,17 @@
 import { FC } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Paper } from '@material-ui/core';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import Header from './Header';
 import ConnectWallet from './ConnectWallet';
-import Nav from './Nav';
 
-import Stake from 'pages/Stake';
-import Unstake from 'pages/Unstake';
+import Positions from 'pages/Positions';
 
 import StakeModal from 'modals/StakeModal';
 import UnstakeModal from 'modals/UnstakeModal';
+import ClaimModal from 'modals/ClaimModal';
+import WithdrawModal from 'modals/WithdrawModal';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -49,17 +44,14 @@ const Layout: FC = () => {
         <Header />
 
         <Paper>
-          <Nav />
-          <Switch>
-            <Route path={'/stake'} component={Stake} />
-            <Route path={'/unstake'} component={Unstake} />
-            <Redirect to={'/stake'} />
-          </Switch>
+          <Positions />
         </Paper>
 
         <Switch>
           <Route path={'/stake/:tokenId'} component={StakeModal} />
           <Route path={'/unstake/:tokenId'} component={UnstakeModal} />
+          <Route path={'/claim/:tokenId'} component={ClaimModal} />
+          <Route path={'/withdraw/:tokenId'} component={WithdrawModal} />
         </Switch>
 
         <ConnectWallet />

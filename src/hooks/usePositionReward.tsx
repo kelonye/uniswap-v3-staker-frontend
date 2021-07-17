@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useContracts } from 'contexts/contracts';
 import { toBigNumber } from 'utils/big-number';
+import { useData } from 'contexts/data';
 
 const usePositionReward = (tokenId: number) => {
-  const { stakingRewardsContract, currentIncentive } = useContracts();
+  const { stakingRewardsContract } = useContracts();
+  const { currentIncentive } = useData();
   const [reward, setReward] = useState(toBigNumber(0));
+  const [staked, setStaked] = useState(false);
 
   useEffect(() => {
     if (!(stakingRewardsContract && currentIncentive)) return;
@@ -15,12 +18,13 @@ const usePositionReward = (tokenId: number) => {
           tokenId
         );
         setReward(toBigNumber(reward.toString()));
+        setStaked(true);
       } catch {}
     };
     load();
   }, [stakingRewardsContract, currentIncentive, tokenId]);
 
-  return reward;
+  return { reward, staked };
 };
 
 export default usePositionReward;
