@@ -186,7 +186,7 @@ const LiquidityPositionTableRow: FC<{
           <Box className='flex items-center'>
             <Box mr={1}>{formatUnits(position.reward, ewitDecimals)}</Box>
             <Tooltip
-              title='Unstake nft to claim reward...'
+              title='Unstake position in order to claim accrued rewards.'
               arrow
               placement='top'
             >
