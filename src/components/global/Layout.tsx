@@ -10,7 +10,6 @@ import Positions from 'pages/Positions';
 
 import StakeModal from 'modals/StakeModal';
 import UnstakeModal from 'modals/UnstakeModal';
-import ClaimModal from 'modals/ClaimModal';
 import WithdrawModal from 'modals/WithdrawModal';
 
 const useStyles = makeStyles((theme) => ({
@@ -50,7 +49,6 @@ const Layout: FC = () => {
         <Switch>
           <Route path={'/stake/:tokenId'} component={StakeModal} />
           <Route path={'/unstake/:tokenId'} component={UnstakeModal} />
-          <Route path={'/claim/:tokenId'} component={ClaimModal} />
           <Route path={'/withdraw/:tokenId'} component={WithdrawModal} />
         </Switch>
 

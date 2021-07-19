@@ -10,6 +10,10 @@
   flex-shrink: 1;
 }
 
+.flex-inline {
+  display: inline-flex;
+}
+
 .items-center {
   align-items: center;
 }
@@ -75,5 +79,3 @@
 .cursor-pointer {
   cursor: pointer;
 }
-
-

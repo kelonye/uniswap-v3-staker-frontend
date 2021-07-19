@@ -1,5 +1,9 @@
+import BigNumber from 'bignumber.js';
+
 export type Incentive = {
   id: string;
+  reward: BigNumber;
+  ended: boolean;
   key: {
     rewardToken: string;
     pool: string;
@@ -12,4 +16,6 @@ export type Incentive = {
 export type LiquidityPosition = {
   tokenId: number;
   owner: string;
+  staked: boolean;
+  reward: BigNumber;
 };

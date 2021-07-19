@@ -14,13 +14,14 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
+import Tooltip from '@material-ui/core/Tooltip';
+import InfoIcon from '@material-ui/icons/Info';
 import moment from 'moment';
 
 import { useWallet } from 'contexts/wallet';
 import { useContracts } from 'contexts/contracts';
 import { useNotifications } from 'contexts/notifications';
 import { useData } from 'contexts/data';
-import usePositionReward from 'hooks/usePositionReward';
 import { LiquidityPosition } from 'utils/types';
 import { formatUnits } from 'utils/big-number';
 
@@ -111,7 +112,8 @@ const Stake: FC<{ history: any }> = ({ history }) => {
                   {incentives.map((incentive) => (
                     <MenuItem value={incentive.id} key={incentive.id}>
                       {formatTimestamp(incentive.key.startTime)} -{' '}
-                      {formatTimestamp(incentive.key.endTime)}
+                      {formatTimestamp(incentive.key.endTime)}{' '}
+                      {incentive.ended ? 'ENDED' : ''}
                     </MenuItem>
                   ))}
                 </Select>
@@ -126,10 +128,6 @@ const Stake: FC<{ history: any }> = ({ history }) => {
                     <TableRow>
                       <TableCell>ID</TableCell>
                       <TableCell>Rewards</TableCell>
-                      <TableCell
-                        align='right'
-                        className={classes.depositButtonCell}
-                      ></TableCell>
                       <TableCell
                         align='right'
                         className={classes.depositButtonCell}
@@ -165,7 +163,6 @@ const LiquidityPositionTableRow: FC<{
   const classes = useStyles();
   const { address } = useWallet();
   const { ewitDecimals } = useContracts();
-  const { staked, reward } = usePositionReward(position.tokenId);
 
   const stake = useCallback(async () => {
     history.push(`/stake/${position.tokenId}`);
@@ -173,10 +170,6 @@ const LiquidityPositionTableRow: FC<{
 
   const unstake = useCallback(async () => {
     history.push(`/unstake/${position.tokenId}`);
-  }, [position.tokenId, history]);
-
-  const claim = useCallback(async () => {
-    history.push(`/claim/${position.tokenId}`);
   }, [position.tokenId, history]);
 
   const withdraw = useCallback(async () => {
@@ -188,26 +181,32 @@ const LiquidityPositionTableRow: FC<{
       <TableCell component='th' scope='row'>
         {position.tokenId.toString()}
       </TableCell>
-      <TableCell>{staked ? formatUnits(reward, ewitDecimals) : '-'}</TableCell>
-      <TableCell align='right' className={classes.depositButtonCell}>
-        <Button
-          color='secondary'
-          variant='contained'
-          onClick={staked ? unstake : stake}
-          className={classes.depositButton}
-        >
-          {staked ? 'Unstake' : 'Stake'}
-        </Button>
+      <TableCell>
+        {!position.reward.isZero() ? (
+          <Box className='flex items-center'>
+            <Box mr={1}>{formatUnits(position.reward, ewitDecimals)}</Box>
+            <Tooltip
+              title='Unstake nft to claim reward...'
+              arrow
+              placement='top'
+            >
+              <Box className='flex items-center cursor'>
+                <InfoIcon fontSize='small' />
+              </Box>
+            </Tooltip>
+          </Box>
+        ) : (
+          '-'
+        )}
       </TableCell>
       <TableCell align='right' className={classes.depositButtonCell}>
         <Button
           color='secondary'
           variant='contained'
-          onClick={claim}
+          onClick={position.staked ? unstake : stake}
           className={classes.depositButton}
-          disabled={reward.isZero()}
         >
-          Claim
+          {position.staked ? 'Unstake' : 'Stake'}
         </Button>
       </TableCell>
       <TableCell align='right' className={classes.depositButtonCell}>

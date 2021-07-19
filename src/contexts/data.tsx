@@ -11,13 +11,15 @@ import BigNumber from 'bignumber.js';
 import _flatten from 'lodash/flatten';
 import _orderBy from 'lodash/orderBy';
 
-import { INCENTIVES } from 'config';
 import { useWallet } from './wallet';
 import { useContracts } from './contracts';
 
 import useTokenInfo from 'hooks/useTokenInfo';
 
 import { Incentive, LiquidityPosition } from 'utils/types';
+import { toBigNumber } from 'utils/big-number';
+import * as request from 'utils/request';
+import { SUBGRAPHS } from 'config';
 
 const DataContext = createContext<{
   positions: LiquidityPosition[];
@@ -55,9 +57,63 @@ export const DataProvider: FC<{ children: ReactNode }> = ({ children }) => {
   // load incentives
   useEffect(() => {
     if (!network) return;
-    const incentives = INCENTIVES[network];
-    setIncentiveIds(incentives);
-    setCurrentIncentiveId(incentives[0].id);
+
+    const load = async () => {
+      const subgraph = request.subgraph(SUBGRAPHS[network])!;
+      const { incentives } = await subgraph(
+        `query {
+          incentives(orderBy: endTime, orderDirection: desc) {
+            id
+            rewardToken
+            pool
+            startTime
+            endTime
+            refundee
+            reward
+            ended
+          }
+        }`,
+        {}
+      );
+      setIncentiveIds(
+        incentives.map(
+          ({
+            id,
+            rewardToken,
+            pool,
+            startTime,
+            endTime,
+            refundee,
+            reward,
+            ended,
+          }: {
+            id: string;
+            rewardToken: string;
+            pool: string;
+            startTime: number;
+            endTime: number;
+            refundee: string;
+            reward: number;
+            ended: boolean;
+          }) =>
+            ({
+              id,
+              reward: toBigNumber(reward),
+              ended,
+              key: {
+                rewardToken,
+                pool,
+                startTime,
+                endTime,
+                refundee,
+              },
+            } as Incentive)
+        )
+      );
+      setCurrentIncentiveId(incentives[0].id);
+    };
+
+    load();
   }, [network]);
 
   // load owned and transfered positions
@@ -67,10 +123,18 @@ export const DataProvider: FC<{ children: ReactNode }> = ({ children }) => {
         nftManagerPositionsContract &&
         stakingRewardsContract &&
         address &&
-        currentIncentiveId
+        currentIncentiveId &&
+        currentIncentive
       )
     )
       return;
+
+    let isMounted = true;
+    const unsubs = [
+      () => {
+        isMounted = false;
+      },
+    ];
 
     const loadPositions = async (owner: string) => {
       const noOfPositions = await nftManagerPositionsContract.balanceOf(owner);
@@ -102,25 +166,104 @@ export const DataProvider: FC<{ children: ReactNode }> = ({ children }) => {
       if (liquidity.isZero()) return null;
       const position = await stakingRewardsContract.deposits(tokenId);
       if (owner !== address && position.owner !== address) return null;
+      let staked = false;
+      let reward = toBigNumber(0);
+      try {
+        const [rewardNumber] = await stakingRewardsContract.getRewardInfo(
+          currentIncentive.key,
+          tokenId
+        );
+        reward = toBigNumber(rewardNumber.toString());
+        staked = true;
+      } catch {}
       return {
-        tokenId,
+        tokenId: Number(tokenId.toString()),
         owner,
+        reward,
+        staked,
       };
     };
 
     const load = async () => {
       const owners: string[] = [address, stakingRewardsContract.address];
       const positions = await Promise.all(owners.map(loadPositions));
-      setPositions(_orderBy(_flatten(positions), 'tokenId'));
+      if (isMounted) {
+        setPositions(_orderBy(_flatten(positions), 'tokenId'));
+      }
     };
 
     load();
+
+    return () => {
+      unsubs.map((u) => u());
+    };
   }, [
     nftManagerPositionsContract,
     stakingRewardsContract,
     address,
     currentIncentiveId,
+    currentIncentive,
   ]);
+
+  useEffect(() => {
+    if (!(stakingRewardsContract && currentIncentiveId)) return;
+
+    let isMounted = true;
+    const unsubs = [
+      () => {
+        isMounted = false;
+      },
+    ];
+
+    const updateStaked = (tokenId: number, incentiveId: string) => {
+      if (incentiveId !== currentIncentiveId) return;
+      if (isMounted) {
+        setPositions((positions) =>
+          positions.map((position) => {
+            if (position.tokenId !== Number(tokenId.toString()))
+              return position;
+            position.staked = true;
+            return position;
+          })
+        );
+      }
+    };
+
+    const updateUnstaked = (tokenId: number, incentiveId: string) => {
+      if (incentiveId !== currentIncentiveId) return;
+      if (isMounted) {
+        setPositions((positions) =>
+          positions.map((position) => {
+            if (position.tokenId !== Number(tokenId.toString()))
+              return position;
+            position.staked = false;
+            return position;
+          })
+        );
+      }
+    };
+
+    const subscribe = () => {
+      const stakedEvent = stakingRewardsContract.filters.TokenStaked();
+      const unstakedEvent = stakingRewardsContract.filters.TokenUnstaked();
+
+      stakingRewardsContract.on(stakedEvent, updateStaked);
+      stakingRewardsContract.on(unstakedEvent, updateUnstaked);
+
+      unsubs.push(() => {
+        stakingRewardsContract.off(stakedEvent, updateStaked);
+      });
+      unsubs.push(() => {
+        stakingRewardsContract.off(unstakedEvent, updateUnstaked);
+      });
+    };
+
+    subscribe();
+
+    return () => {
+      unsubs.map((u) => u());
+    };
+  }, [stakingRewardsContract, positions, currentIncentiveId]);
 
   return (
     <DataContext.Provider

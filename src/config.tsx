@@ -1,5 +1,3 @@
-import { Incentive } from 'utils/types';
-
 export const BORDER_RADIUS = 4;
 export const APP_NAME = 'Witswap | Stake';
 
@@ -33,17 +31,7 @@ export const STAKING_REWARDS_ADDRESS: Record<string, string> = {
   [NETWORK_RINKEBY]: '0xc462aB5e66067153Bf1B368493E4744C1cA4BeC9',
 };
 
-export const INCENTIVES: Record<string, Incentive[]> = {
-  [NETWORK_RINKEBY]: [
-    {
-      id: '0x2692397fe272eb250af25322b876e1704b036563bfb48392cd45862ff41076bb',
-      key: {
-        rewardToken: '0x2ef5b89bfd5ba8c3b15879106c57010aa7a32d06',
-        pool: '0x34293f9D63d11ea594973C045dEFFDdE29618984',
-        startTime: 1625777028,
-        endTime: 1626381828,
-        refundee: '0xD1F5f0753E3b31AEc955208440A32B597A38b319',
-      },
-    },
-  ],
+export const SUBGRAPHS: Record<string, string> = {
+  [NETWORK_RINKEBY]:
+    'https://api.thegraph.com/subgraphs/name/vbstreetz/witstap-staking-rinkeby',
 };

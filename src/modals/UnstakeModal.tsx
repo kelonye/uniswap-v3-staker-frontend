@@ -44,7 +44,7 @@ const UnstakeStepper: FC<{
           mt={2}
           className='flex flex-grow justify-space items-center'
         >
-          <Typography variant='h5'>Stake #{tokenId}</Typography>
+          <Typography variant='h5'>Unstake #{tokenId}</Typography>
 
           <CloseIcon className='cursor-pointer' onClick={close} />
         </Box>
