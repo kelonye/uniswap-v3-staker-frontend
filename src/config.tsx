@@ -29,12 +29,12 @@ export const NFT_POSITIONS_MANAGER_ADDRESS: Record<string, string> = {
 
 export const STAKING_REWARDS_ADDRESS: Record<string, string> = {
   [NETWORK_RINKEBY]: '0xc462aB5e66067153Bf1B368493E4744C1cA4BeC9',
-  [NETWORK_MAINNET]: '',
+  [NETWORK_MAINNET]: '0x9213d5c6d737Fc2744db9d67037fE90D76Cb0F77',
 };
 
 export const SUBGRAPHS: Record<string, string> = {
   [NETWORK_RINKEBY]:
-    'https://api.thegraph.com/subgraphs/name/vbstreetz/witwtap-staking-rinkeby',
+    'https://api.thegraph.com/subgraphs/name/vbstreetz/witswap-staking-rinkeby',
   [NETWORK_MAINNET]:
-    'https://api.thegraph.com/subgraphs/name/vbstreetz/witwtap-staking',
+    'https://api.thegraph.com/subgraphs/name/vbstreetz/witswap-staking',
 };
