@@ -66,7 +66,6 @@ const Stake: FC<{ history: any }> = ({ history }) => {
                 color='secondary'
                 variant='contained'
                 onClick={startConnectingWallet}
-                className={classes.depositButton}
               >
                 Connect Wallet
               </Button>
@@ -100,7 +99,9 @@ const Stake: FC<{ history: any }> = ({ history }) => {
 
             <Box m={2} mt={3} className='flex flex-grow justify-space'>
               <FormControl>
-                <InputLabel id='incentive-label'>Incentive</InputLabel>
+                <InputLabel id='incentive-label' shrink>
+                  Incentive
+                </InputLabel>
                 <Select
                   labelId='incentive-label'
                   id='incentive'
@@ -283,7 +284,7 @@ const ClaimAvailableReward: FC = () => {
         currentIncentive.key.rewardToken,
         address
       );
-      await tx('Claiming..', 'Claimed!', () =>
+      await tx('Claiming...', 'Claimed!', () =>
         stakingRewardsContract.claimReward(
           currentIncentive.key.rewardToken,
           address,

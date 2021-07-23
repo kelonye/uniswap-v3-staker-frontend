@@ -28,8 +28,8 @@ const usePosition = (tokenId: number) => {
         return;
 
       try {
-        setIsWorking('Approving..');
-        await tx('Approving..', 'Approved!', () =>
+        setIsWorking('Approving...');
+        await tx('Approving...', 'Approved!', () =>
           nftManagerPositionsContract.approve(
             stakingRewardsContract.address,
             tokenId
@@ -64,9 +64,9 @@ const usePosition = (tokenId: number) => {
         return;
 
       try {
-        setIsWorking('Transfering..');
+        setIsWorking('Transfering...');
         await tx(
-          'Transfering..',
+          'Transfering...',
           'Transfered!',
           () =>
             nftManagerPositionsContract[
@@ -95,8 +95,8 @@ const usePosition = (tokenId: number) => {
       if (!(stakingRewardsContract && currentIncentive)) return;
 
       try {
-        setIsWorking('Staking..');
-        await tx('Staking..', 'Staked!', () =>
+        setIsWorking('Staking...');
+        await tx('Staking...', 'Staked!', () =>
           stakingRewardsContract.stakeToken(currentIncentive.key, tokenId)
         );
         next();
@@ -114,8 +114,8 @@ const usePosition = (tokenId: number) => {
       if (!(stakingRewardsContract && currentIncentive)) return;
 
       try {
-        setIsWorking('Unstaking..');
-        await tx('Unstaking..', 'Unstaked!', () =>
+        setIsWorking('Unstaking...');
+        await tx('Unstaking...', 'Unstaked!', () =>
           stakingRewardsContract.unstakeToken(currentIncentive.key, tokenId)
         );
         next();
@@ -133,12 +133,12 @@ const usePosition = (tokenId: number) => {
       if (!(stakingRewardsContract && currentIncentive && address)) return;
 
       try {
-        setIsWorking('Claiming..');
+        setIsWorking('Claiming...');
         const reward = await stakingRewardsContract.rewards(
           currentIncentive.key.rewardToken,
           address
         );
-        await tx('Claiming..', 'Claimed!', () =>
+        await tx('Claiming...', 'Claimed!', () =>
           stakingRewardsContract.claimReward(
             currentIncentive.key.rewardToken,
             address,
@@ -160,8 +160,8 @@ const usePosition = (tokenId: number) => {
       if (!(stakingRewardsContract && address)) return;
 
       try {
-        setIsWorking('Withdrawing..');
-        await tx('Withdrawing..', 'Withdrew!', () =>
+        setIsWorking('Withdrawing...');
+        await tx('Withdrawing...', 'Withdrew!', () =>
           stakingRewardsContract.withdrawToken(tokenId, address, [])
         );
         next();
