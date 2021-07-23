@@ -110,7 +110,7 @@ export const DataProvider: FC<{ children: ReactNode }> = ({ children }) => {
             } as Incentive)
         )
       );
-      setCurrentIncentiveId(incentives[0].id);
+      setCurrentIncentiveId(incentives[0]?.id ?? null);
     };
 
     load();
