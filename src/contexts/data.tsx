@@ -103,8 +103,8 @@ export const DataProvider: FC<{ children: ReactNode }> = ({ children }) => {
               key: {
                 rewardToken,
                 pool,
-                startTime,
-                endTime,
+                startTime: Number(startTime),
+                endTime: Number(endTime),
                 refundee,
               },
             } as Incentive)

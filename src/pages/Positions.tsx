@@ -316,7 +316,7 @@ const ClaimAvailableReward: FC = () => {
 };
 
 function formatTimestamp(unix: number) {
-  return moment.unix(unix).local().format('YYYY-MM-DD hhmm[h]');
+  return moment.unix(unix).local().format('YYYY-MM-DD HHmm[h]');
 }
 
 export default withRouter(Stake);
