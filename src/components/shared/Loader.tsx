@@ -1,4 +1,4 @@
-import { FC, useState, useMemo, useEffect } from 'react';
+import { FC } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const Loader: FC<{

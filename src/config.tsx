@@ -12,14 +12,14 @@ export const NETWORK_MAINNET = 'mainnet';
 export const NETWORK_RINKEBY = 'rinkeby';
 export const AVAILABLE_NETWORKS = [NETWORK_MAINNET, NETWORK_RINKEBY];
 
-export const EWIT_ADDRESS: Record<string, string> = {
+export const TOKEN_0_ADDRESS: Record<string, string> = {
   [NETWORK_RINKEBY]: '0x2ef5B89bFD5BA8C3b15879106C57010aA7A32D06',
   [NETWORK_MAINNET]: '0x56ee175fe37cd461486ce3c3166e0cafccd9843f',
 };
 
-export const USDC_ADDRESS: Record<string, string> = {
+export const TOKEN_1_ADDRESS: Record<string, string> = {
   [NETWORK_RINKEBY]: '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b',
-  [NETWORK_MAINNET]: '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b',
+  [NETWORK_MAINNET]: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
 };
 
 export const NFT_POSITIONS_MANAGER_ADDRESS: Record<string, string> = {

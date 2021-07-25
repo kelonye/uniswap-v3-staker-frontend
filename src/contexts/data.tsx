@@ -7,15 +7,12 @@ import {
   createContext,
   ReactNode,
 } from 'react';
-import BigNumber from 'bignumber.js';
 import _flatten from 'lodash/flatten';
 import _orderBy from 'lodash/orderBy';
 
-import { useWallet } from './wallet';
-import { useContracts } from './contracts';
-
+import { useWallet } from 'contexts/wallet';
+import { useContracts } from 'contexts/contracts';
 import useTokenInfo from 'hooks/useTokenInfo';
-
 import { Incentive, LiquidityPosition } from 'utils/types';
 import { toBigNumber } from 'utils/big-number';
 import * as request from 'utils/request';
@@ -23,16 +20,16 @@ import { SUBGRAPHS } from 'config';
 
 const DataContext = createContext<{
   positions: LiquidityPosition[];
-  ewitBalance: BigNumber;
   incentives: Incentive[];
   currentIncentiveId: string | null;
   currentIncentive: Incentive | null;
   setCurrentIncentiveId: (id: string) => void;
+  currentIncentiveRewardTokenSymbol: string | null;
+  currentIncentiveRewardTokenDecimals: number | null;
 } | null>(null);
 
 export const DataProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const {
-    ewitAddress,
     stakingRewardsContract,
     nftManagerPositionsContract,
   } = useContracts();
@@ -43,8 +40,6 @@ export const DataProvider: FC<{ children: ReactNode }> = ({ children }) => {
     null
   );
 
-  const { balance: ewitBalance } = useTokenInfo(ewitAddress);
-
   const currentIncentive = useMemo(
     () =>
       !currentIncentiveId
@@ -53,6 +48,11 @@ export const DataProvider: FC<{ children: ReactNode }> = ({ children }) => {
           null,
     [currentIncentiveId, incentives]
   );
+
+  const {
+    decimals: currentIncentiveRewardTokenDecimals,
+    symbol: currentIncentiveRewardTokenSymbol,
+  } = useTokenInfo(currentIncentive?.key.rewardToken ?? null);
 
   // load incentives
   useEffect(() => {
@@ -269,11 +269,12 @@ export const DataProvider: FC<{ children: ReactNode }> = ({ children }) => {
     <DataContext.Provider
       value={{
         positions,
-        ewitBalance,
         incentives,
         currentIncentiveId,
         currentIncentive,
         setCurrentIncentiveId,
+        currentIncentiveRewardTokenSymbol,
+        currentIncentiveRewardTokenDecimals,
       }}
     >
       {children}
@@ -288,19 +289,21 @@ export function useData() {
   }
   const {
     positions,
-    ewitBalance,
     incentives,
     currentIncentiveId,
     currentIncentive,
     setCurrentIncentiveId,
+    currentIncentiveRewardTokenSymbol,
+    currentIncentiveRewardTokenDecimals,
   } = context;
 
   return {
     positions,
-    ewitBalance,
     incentives,
     currentIncentiveId,
     currentIncentive,
     setCurrentIncentiveId,
+    currentIncentiveRewardTokenSymbol,
+    currentIncentiveRewardTokenDecimals,
   };
 }

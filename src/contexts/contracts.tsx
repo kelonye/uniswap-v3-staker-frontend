@@ -2,21 +2,23 @@ import { FC, useContext, useMemo, createContext, ReactNode } from 'react';
 import { ethers } from 'ethers';
 
 import {
-  USDC_ADDRESS,
-  EWIT_ADDRESS,
+  TOKEN_0_ADDRESS,
+  TOKEN_1_ADDRESS,
   NFT_POSITIONS_MANAGER_ADDRESS,
   STAKING_REWARDS_ADDRESS,
 } from 'config';
-import { useWallet } from './wallet';
-
+import { useWallet } from 'contexts/wallet';
+import useTokenInfo from 'hooks/useTokenInfo';
 import NFT_POSITIONS_MANAGER_ABI from 'abis/nft_positions_manager.json';
 import STAKING_REWARDS_ABI from 'abis/staking_rewards.json';
 
 const ContractsContext = createContext<{
-  usdcAddress: string | null;
-  ewitAddress: string | null;
-  usdcDecimals: number;
-  ewitDecimals: number;
+  token0Address: string | null;
+  token1Address: string | null;
+  token0Decimals: number | null;
+  token1Decimals: number | null;
+  token0Symbol: string | null;
+  token1Symbol: string | null;
   stakingRewardsContract: ethers.Contract | null;
   nftManagerPositionsContract: ethers.Contract | null;
 } | null>(null);
@@ -26,17 +28,22 @@ export const ContractsProvider: FC<{ children: ReactNode }> = ({
 }) => {
   const { network, signer } = useWallet();
 
-  const usdcAddress = !network ? null : USDC_ADDRESS[network];
-  const ewitAddress = !network ? null : EWIT_ADDRESS[network];
+  const token0Address = !network ? null : TOKEN_0_ADDRESS[network];
+  const token1Address = !network ? null : TOKEN_1_ADDRESS[network];
+
+  const { decimals: token0Decimals, symbol: token0Symbol } = useTokenInfo(
+    token0Address
+  );
+  const { decimals: token1Decimals, symbol: token1Symbol } = useTokenInfo(
+    token1Address
+  );
+
   const nftManagerPositionsAddress = !network
     ? null
     : NFT_POSITIONS_MANAGER_ADDRESS[network];
   const stakingRewardsAddress = !network
     ? null
     : STAKING_REWARDS_ADDRESS[network];
-
-  const ewitDecimals = 9;
-  const usdcDecimals = 9;
 
   const nftManagerPositionsContract = useMemo(
     () =>
@@ -65,10 +72,12 @@ export const ContractsProvider: FC<{ children: ReactNode }> = ({
   return (
     <ContractsContext.Provider
       value={{
-        usdcAddress,
-        ewitAddress,
-        ewitDecimals,
-        usdcDecimals,
+        token0Address,
+        token1Address,
+        token0Decimals,
+        token1Decimals,
+        token0Symbol,
+        token1Symbol,
         stakingRewardsContract,
         nftManagerPositionsContract,
       }}
@@ -84,19 +93,23 @@ export function useContracts() {
     throw new Error('Missing Contracts context');
   }
   const {
-    usdcAddress,
-    ewitAddress,
-    ewitDecimals,
-    usdcDecimals,
+    token0Address,
+    token1Address,
+    token0Decimals,
+    token1Decimals,
+    token0Symbol,
+    token1Symbol,
     stakingRewardsContract,
     nftManagerPositionsContract,
   } = context;
 
   return {
-    usdcAddress,
-    ewitAddress,
-    ewitDecimals,
-    usdcDecimals,
+    token0Address,
+    token1Address,
+    token0Decimals,
+    token1Decimals,
+    token0Symbol,
+    token1Symbol,
     stakingRewardsContract,
     nftManagerPositionsContract,
   };

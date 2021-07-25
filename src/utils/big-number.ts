@@ -11,7 +11,12 @@ export function toFixed(a: any, b: any, precision?: number) {
     .toFormat(precision ?? PRECISION);
 }
 
-export function formatUnits(a: any, decimals: number, precision?: number) {
+export function formatUnits(
+  a: any,
+  decimals: number | null,
+  precision?: number
+) {
+  if (!decimals) return '';
   return toFixed(a, toBigNumber(10).pow(decimals), precision);
 }
 

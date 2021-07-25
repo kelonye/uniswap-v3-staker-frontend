@@ -1,4 +1,4 @@
-import { FC, useState, useMemo, useEffect, ReactNode } from 'react';
+import { FC, useState, useEffect, ReactNode } from 'react';
 import * as ethers from 'ethers';
 import { makeStyles } from '@material-ui/core/styles';
 import { formatUnits } from 'utils/big-number';
@@ -49,7 +49,7 @@ const ETH: FC<{ header: ReactNode }> = ({ header }) => {
 
     load();
     return subscribe();
-  }, []);
+  }, [signer]);
 
   return (
     balance && (

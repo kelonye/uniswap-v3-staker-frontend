@@ -41,7 +41,12 @@ export const useStyles = makeStyles((theme) => ({
 const Stake: FC<{ history: any }> = ({ history }) => {
   const classes = useStyles();
   const { startConnecting: startConnectingWallet, address } = useWallet();
-  const { usdcAddress, ewitAddress } = useContracts();
+  const {
+    token0Address,
+    token1Address,
+    token0Symbol,
+    token1Symbol,
+  } = useContracts();
   const {
     positions,
     currentIncentiveId,
@@ -75,18 +80,19 @@ const Stake: FC<{ history: any }> = ({ history }) => {
           <>
             <Box>
               <Typography>
-                You have {positions.length} EWIT-USDC liquidity positions.
+                You have {positions.length} {token0Symbol}-{token1Symbol}{' '}
+                liquidity positions.
               </Typography>
             </Box>
 
             <Box>
               <Typography variant='caption'>
                 Get {!positions.length ? 'some' : 'more'} by providing liquidity
-                to the EWIT-USDC Pool over{' '}
+                to the {token0Symbol}-{token1Symbol} Pool over{' '}
                 <a
                   href={`https://app.uniswap.org/#/add/${[
-                    usdcAddress,
-                    ewitAddress,
+                    token1Address,
+                    token0Address,
                   ].join('/')}`}
                   target='_blank'
                   rel='noopener noreferrer'
@@ -163,7 +169,7 @@ const LiquidityPositionTableRow: FC<{
 }> = ({ position, history }) => {
   const classes = useStyles();
   const { address } = useWallet();
-  const { ewitDecimals } = useContracts();
+  const { token0Decimals } = useContracts();
 
   const stake = useCallback(async () => {
     history.push(`/stake/${position.tokenId}`);
@@ -185,7 +191,7 @@ const LiquidityPositionTableRow: FC<{
       <TableCell>
         {!position.reward.isZero() ? (
           <Box className='flex items-center'>
-            <Box mr={1}>{formatUnits(position.reward, ewitDecimals)}</Box>
+            <Box mr={1}>{formatUnits(position.reward, token0Decimals)}</Box>
             <Tooltip
               title='Unstake position in order to claim accrued rewards.'
               arrow
@@ -227,8 +233,12 @@ const LiquidityPositionTableRow: FC<{
 
 const ClaimAvailableReward: FC = () => {
   const classes = useStyles();
-  const { ewitDecimals, stakingRewardsContract } = useContracts();
-  const { currentIncentive } = useData();
+  const { stakingRewardsContract } = useContracts();
+  const {
+    currentIncentiveRewardTokenSymbol,
+    currentIncentiveRewardTokenDecimals,
+    currentIncentive,
+  } = useData();
   const { address } = useWallet();
   const { tx } = useNotifications();
 
@@ -301,7 +311,10 @@ const ClaimAvailableReward: FC = () => {
   return (
     <Box className='flex items-center'>
       <Box mr={1}>REWARDS:</Box>{' '}
-      <Box mr={2}>{formatUnits(reward, ewitDecimals)} EWIT</Box>
+      <Box mr={2}>
+        {formatUnits(reward, currentIncentiveRewardTokenDecimals)}{' '}
+        {currentIncentiveRewardTokenSymbol}
+      </Box>
       <Button
         color='secondary'
         variant='contained'
