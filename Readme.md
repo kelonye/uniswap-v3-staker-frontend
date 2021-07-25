@@ -1,3 +1,9 @@
+<div align="center">
+  <a href="https://witswap-staking.vercel.app">
+    <img src="https://witswap-staking.vercel.app/screenshot.png" alt="witswap staking" width=700 />
+  </a>
+</div>
+
 ## Uniswap V3 Staker Frontend
 
 A frontend to be used to perform liquidity mining incentives via the [Uniswap V3 Staker Contract](https://github.com/Uniswap/uniswap-v3-staker).

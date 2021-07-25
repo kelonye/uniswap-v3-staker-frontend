@@ -105,26 +105,32 @@ const Stake: FC<{ history: any }> = ({ history }) => {
 
             <Box m={2} mt={3} className='flex flex-grow justify-space'>
               <FormControl>
-                <InputLabel id='incentive-label' shrink>
-                  Incentive
-                </InputLabel>
-                <Select
-                  labelId='incentive-label'
-                  id='incentive'
-                  value={currentIncentiveId}
-                  onChange={(e) => {
-                    setCurrentIncentiveId(e.target.value as string);
-                  }}
-                >
-                  {incentives.map((incentive) => (
-                    <MenuItem value={incentive.id} key={incentive.id}>
-                      {formatTimestamp(incentive.key.startTime)} -{' '}
-                      {formatTimestamp(incentive.key.endTime)}{' '}
-                      {incentive.ended ? 'ENDED' : ''}
-                    </MenuItem>
-                  ))}
-                </Select>
+                {!currentIncentiveId ? null : (
+                  <>
+                    <InputLabel id='incentive-label' shrink>
+                      Incentive
+                    </InputLabel>
+                    <Select
+                      labelId='incentive-label'
+                      id='incentive'
+                      value={currentIncentiveId}
+                      displayEmpty
+                      onChange={(e) => {
+                        setCurrentIncentiveId(e.target.value as string);
+                      }}
+                    >
+                      {incentives.map((incentive) => (
+                        <MenuItem value={incentive.id} key={incentive.id}>
+                          {formatTimestamp(incentive.key.startTime)} -{' '}
+                          {formatTimestamp(incentive.key.endTime)}{' '}
+                          {incentive.ended ? 'ENDED' : ''}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </>
+                )}
               </FormControl>
+
               <ClaimAvailableReward />
             </Box>
 
