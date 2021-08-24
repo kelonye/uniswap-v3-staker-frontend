@@ -30,3 +30,7 @@ This frontend was original used to build a frontend to be used to incentive liqu
 
 - [React](https://reactjs.org/)
 - [Material UI](https://material-ui.com/)
+
+## License
+
+MIT
